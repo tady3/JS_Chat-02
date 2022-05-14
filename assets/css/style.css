@@ -15,14 +15,15 @@ body {
 
 .chat-input {
   position: fixed;
-  bottom: 0px;
+  bottom: 0;
 }
 
-.form-control_1{
+/* .form-control_1{
   width: 20%; 
-}
+} */
+
 .form-control_2{
-  width: 72%;
+  width:85%;
 }
 
 
@@ -39,8 +40,6 @@ body {
 
 }
 
-
-
 .box-left {
   display: flex;
   justify-content: flex-start;
@@ -53,7 +52,7 @@ body {
 
 .message-box {
   padding: 50px;
-  max-width: 40%;
+  max-width: 42%;
   margin: 10px;
   border-radius: 30px;
 }

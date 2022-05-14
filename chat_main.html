@@ -31,18 +31,18 @@
 
 
   <div class="input-group chat-input">
-    <select name="" id="uname">
+    <!-- <select name="" id="uname">
       <option value="" label=""></option>
       <option value="ユーザーA" label="ユーザーA"></option>
       <option value="ユーザーB" label="ユーザーB"></option>
-    </select>
+    </select> -->
 
 
     <!-- <input id="uname" type="select" class="form-control_1" placeholder="ユーザー名" > -->
-    <input id="inputMessage" type="text" class="form-control_2" placeholder="メッセージを入力してください">
+    <input id="inputMessage" type="text" class="form-control_2" placeholder="メッセージを入力してEnter">
 
     <div class="input-group-append">
-      <button id="sendBtn" class="btn btn-primary" type="button">送信</button>
+      <button id="sendBtn" class="btn btn-primary" type="button">メッセージ削除</button>
     </div>
   </div>
 
@@ -84,6 +84,8 @@
     const dbRef = ref(db, "chat");                //〃：RealTimeDB内の”chat”を使う
 
 
+    let myName = prompt("Enter your name");
+
     //送信イベント
     // $("#send").on("click",function(){
 
@@ -98,7 +100,7 @@
         const text = $("#inputMessage")
 
         const msg = {
-          uname: $("#uname").val(),
+          uname: myName,
           text: $("#inputMessage").val()
         }
 
@@ -132,9 +134,8 @@
 
 
 
-
       // let msg_text = '<p>';
-      let msg_text = msg.uname;
+      let msg_text = msg.uname+":";
       msg_text += '<br>';
       msg_text += msg.text;
       // msg_text += '</p>';
@@ -142,19 +143,19 @@
       console.log(msg_text);
 
 
-      if (data.val().uname == "ユーザーA") {
+      if (data.val().uname == myName) {
             let divData =  '<div class="box-right">\n' +
-              '                        <div class="img_cont_msg">\n' +
-              '                        <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"\n' +
-                '                                 class="rounded-circle user_img_msg">\n' +
-                '                        </div>\n' +
-
-                            '<p id="messageBox" class="message-box green">\n'+''
-                               + msg_text + '' +
-                              '</p>\n'
-                              '</div>\n';
+        '                        <div class="img_cont_msg">\n' +
+        '                        <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"\n' +
+        '                                 class="rounded-circle user_img_msg">\n' +
+        '                        </div>\n' +
+                                '<p id="messageBox" class="message-box green">\n'+''
+                                    + msg_text + '' +
+                                '</p>\n'
+                            '</div>\n';
             let d1 = document.getElementById('bodyContent');
             d1.insertAdjacentHTML('beforebegin', divData);
+            
           }else {
             let divData =  '<div class="box-left">\n' +
                             '<p id="messageBox" class="message-box white">\n'+''
@@ -218,21 +219,11 @@
 
 
 
+    //自分の最新メッセージを削除する
+    $("#sendBtn").on("click", function () {
+        $($(".box-right")[$(".box-right").length-1]).remove(); 
 
-
-
-
-
-
-
-
-
-
-    $("#send").on("click", function () {
-      let message = $(this).closest('div');
-      message.remove();
     })
-
 
 
 
