@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <title>Chat</title>
+</head>
+
+<body>
+
+  <div id="room">
+
+    <!-- <div class="box-left">
+      <p id="messageBox1"class="message-box white">こんにちは</p>
+    </div>
+
+    <div class="box-right">
+      <p id="messageBox" class="message-box green">こんにちは</p>
+    </div> -->
+
+    <div class="card-body msg_card_body" id="bodyContent">
+    </div>
+
+  </div>
+
+
+  <div class="input-group chat-input">
+    <select name="" id="uname">
+      <option value="" label=""></option>
+      <option value="ユーザーA" label="ユーザーA"></option>
+      <option value="ユーザーB" label="ユーザーB"></option>
+    </select>
+
+
+    <!-- <input id="uname" type="select" class="form-control_1" placeholder="ユーザー名" > -->
+    <input id="inputMessage" type="text" class="form-control_2" placeholder="メッセージを入力してください">
+
+    <div class="input-group-append">
+      <button id="sendBtn" class="btn btn-primary" type="button">送信</button>
+    </div>
+  </div>
+
+
+
+  <!-- JQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- JQuery -->
+
+  <script src="./assets/js/app.js"></script>
+
+
+
+  <!--** 以下Firebase **-->
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+    import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved, child, onValue } //ここに書いている関数をこれから使っていく
+      from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
+
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {　                          //以下がFirebaseのRealtimeDatabaseのobject。
+      apiKey: "AIzaSyBLvlQgQIMg4gcyc31kX4B811-yAgFF8BE",
+      authDomain: "gsdemo-96e4c.firebaseapp.com",
+      projectId: "gsdemo-96e4c",
+      storageBucket: "gsdemo-96e4c.appspot.com",
+      messagingSenderId: "363606707675",
+      appId: "1:363606707675:web:cb7045c615508b0064abfe"
+    };
+
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);              //firebaseの記述ルール：RealtimeDBに接続    
+    const dbRef = ref(db, "chat");                //〃：RealTimeDB内の”chat”を使う
+
+
+    //送信イベント
+    // $("#send").on("click",function(){
+
+
+
+    //Enterを押すとtextが発火する
+    $("#inputMessage").on("keydown", function (e) {
+
+      if (e.keyCode == 13) {
+
+
+        const text = $("#inputMessage")
+
+        const msg = {
+          uname: $("#uname").val(),
+          text: $("#inputMessage").val()
+        }
+
+        //unameが空欄の場合は送信できないようにする     
+        if (msg.uname === '') {
+          //unameが空欄の場合にアラートを出す
+          alert("名前をいれてください");
+
+        }
+        else {
+          const newPostRef = push(dbRef);　//ユニークキーを作る
+          set(newPostRef, msg);
+
+          //送信したらtextの内容が消える
+          text.val('');
+        }
+        // 入力値が空かチェックする
+      if (text == '') {
+        // 入力値が空の場合、処理を中断する
+        return;
+      }
+      } });
+
+
+
+    //受信イベント
+
+    onChildAdded(dbRef, function (data) {
+      const msg = data.val();
+      const key = data.key; //ユニークキーの取得
+
+
+
+
+      // let msg_text = '<p>';
+      let msg_text = msg.uname;
+      msg_text += '<br>';
+      msg_text += msg.text;
+      // msg_text += '</p>';
+
+      console.log(msg_text);
+
+
+      if (data.val().uname == "ユーザーA") {
+            let divData =  '<div class="box-right">\n' +
+              '                        <div class="img_cont_msg">\n' +
+              '                        <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"\n' +
+                '                                 class="rounded-circle user_img_msg">\n' +
+                '                        </div>\n' +
+
+                            '<p id="messageBox" class="message-box green">\n'+''
+                               + msg_text + '' +
+                              '</p>\n'
+                              '</div>\n';
+            let d1 = document.getElementById('bodyContent');
+            d1.insertAdjacentHTML('beforebegin', divData);
+          }else {
+            let divData =  '<div class="box-left">\n' +
+                            '<p id="messageBox" class="message-box white">\n'+''
+                               + msg_text + '' +
+                              '</p>\n'
+        '                        <div class="img_cont_msg">\n' +
+    '                              <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"\n' +
+    '                                  class="rounded-circle user_img_msg">\n' +
+    '                            </div>\n' +
+                              '</div>\n';
+
+            let d1 = document.getElementById('bodyContent');
+            d1.insertAdjacentHTML('beforebegin', divData);
+            }
+
+          });
+  
+
+
+      //メッセージの中身pをdivに追加
+      // let messageBox= $("#messageBox1").append(msg_text )
+
+      // //メッセージ用のdivをチャット画面のdivに追加
+      // $("#room").append( messageBox );      
+      
+      //  let d1 = document.getElementById('bodyContent');
+      //       d1.insertAdjacentHTML('beforebegin', messageBox);
+
+
+
+
+    // // メッセージ用のdivを作成する
+    // function createMessageBox() {
+    //   // divを作成       
+    //   let messageBox = document.createElement('div');
+    // }
+
+    //     // メッセージ用のpを作成する
+    // function createMessage(messageText) {
+    //   // // pタグを作成
+    //   // let message = document.createElement('p');
+    //   // pタグのテキストに、画面の入力値を設定
+    //   msg_text.textContent = messageText;
+
+    //   // pタグに「message-box」というクラスを追加
+    //   msg_text.classList.add('message-box');
+    // }
+    //     // divにpタグを追加する
+
+    //   messageBox.append(msg_text)
+    
+
+    //   // チャット画面である、divタグを取得する
+    //   let room = document.getElementById('room');
+
+    //   // チャット画面のdivに新規メッセージのdivを追加する
+    //   room.appendChild(messageBox);
+
+
+    // msg_text.classList.add('message-box');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $("#send").on("click", function () {
+      let message = $(this).closest('div');
+      message.remove();
+    })
+
+
+
+
+
+
+
+
+  </script>
+
+</body>
+
+</html>
