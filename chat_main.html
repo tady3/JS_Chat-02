@@ -152,11 +152,15 @@
 
       //#unameが前に入れた名前と一致している場合、は右に表示される
 
+      
       if (data.val().uname == myName) {
             let divData =  '<div class="box-right">\n' +
+              
                  
         '                        <div class="img_cont_msg">\n' +
-        '                          <img src="./tachan_images.jpg"\n' +
+        '                          <img src="./assets/tachan_images.jpg"\n' +
+                                          //class名をrounded-circlenにすると写真が丸で切り取られる
+                                                                            
         '                                 class="rounded-circle user_img_msg">\n' +
         '                        </div>\n' +
 
@@ -175,7 +179,7 @@
           }else {
             let divData =  '<div class="box-left">\n' +
               '                        <div class="img_cont_msg">\n' +
-    '                              <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"\n'+
+    '                              <img src="./assets/goku.jpg"\n'+
     '                                  class="rounded-circle user_img_msg">\n'+
     '                            </div>\n' +
                             '<p id="messageBox" class="message-box white">\n'+''
