@@ -84,6 +84,7 @@
     const dbRef = ref(db, "chat");                //〃：RealTimeDB内の”chat”を使う
 
 
+    
 
     // promptでユーザー名を確認。ブランクやnullだと中に入れないようにしたい
     //※elseの処理を受信アクションよりしたに持っていく必要があった
@@ -126,13 +127,12 @@
       } });
 
 
-
     //受信イベント
+    
 
     onChildAdded(dbRef, function (data) {
       const msg = data.val();
       const key = data.key; //ユニークキーの取得
-
 
 
       // let msg_text = '<p>';
@@ -144,19 +144,25 @@
       console.log(msg_text);
 
 
+      //#unameが前に入れた名前と一致している場合、は右に表示される
+
       if (data.val().uname == myName) {
             let divData =  '<div class="box-right">\n' +
         '                        <div class="img_cont_msg">\n' +
-        '                        <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"\n' +
+        '                          <img src="./tachan_images.jpg"\n' +
         '                                 class="rounded-circle user_img_msg">\n' +
         '                        </div>\n' +
                                 '<p id="messageBox" class="message-box green">\n'+''
                                     + msg_text + '' +
                                 '</p>\n'
                             '</div>\n';
-            let d1 = document.getElementById('bodyContent');
-            d1.insertAdjacentHTML('beforebegin', divData);
+           //送信テキストをid_bodyContentのdivの直前に置く、とすることで、毎メッセージを一つの塊として表示。
+           let d1 = document.getElementById('bodyContent');
+           d1.insertAdjacentHTML('beforebegin', divData);
+
             
+          //#unameが前に入れた名前と一致しない場合、は左に表示される
+
           }else {
             let divData =  '<div class="box-left">\n' +
                             '<p id="messageBox" class="message-box white">\n'+''
@@ -167,6 +173,8 @@
     '                                  class="rounded-circle user_img_msg">\n' +
     '                            </div>\n' +
                               '</div>\n';
+
+           //送信テキストをid_bodyContentのdivの直前に置く、とすることで、毎メッセージを一つの塊として表示。
 
             let d1 = document.getElementById('bodyContent');
             d1.insertAdjacentHTML('beforebegin', divData);
