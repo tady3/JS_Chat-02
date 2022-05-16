@@ -85,7 +85,8 @@
 
 
 
-    // ユーザー名を確認。ブランクやnullだと中に入れないようにしたい
+    // promptでユーザー名を確認。ブランクやnullだと中に入れないようにしたい
+    //※elseの処理を受信アクションよりしたに持っていく必要があった
     
     let myName = prompt("ユーザー名をいれてください");
     if( myName=== null||myName==""){alert("ユーザー名の入力は必須です")}
@@ -105,9 +106,9 @@
         }
 
         //unameが空欄の場合は送信できないようにする     
-        if (msg.uname === '') {
-          //unameが空欄の場合にアラートを出す
-          alert("ユーザー名をいれてください");
+        if (msg.text === '') {
+          //textが空欄の場合にアラートを出す
+          alert("空欄では発信できません");
 
         }
         else {
@@ -174,53 +175,13 @@
           });
         }
   
-
-
-      //メッセージの中身pをdivに追加
-      // let messageBox= $("#messageBox1").append(msg_text )
-
-      // //メッセージ用のdivをチャット画面のdivに追加
-      // $("#room").append( messageBox );      
       
-      //  let d1 = document.getElementById('bodyContent');
-      //       d1.insertAdjacentHTML('beforebegin', messageBox);
-
-
-
-
-    // // メッセージ用のdivを作成する
-    // function createMessageBox() {
-    //   // divを作成       
-    //   let messageBox = document.createElement('div');
-    // }
-
-    //     // メッセージ用のpを作成する
-    // function createMessage(messageText) {
-    //   // // pタグを作成
-    //   // let message = document.createElement('p');
-    //   // pタグのテキストに、画面の入力値を設定
-    //   msg_text.textContent = messageText;
-
-    //   // pタグに「message-box」というクラスを追加
-    //   msg_text.classList.add('message-box');
-    // }
-    //     // divにpタグを追加する
-
-    //   messageBox.append(msg_text)
-    
-
-    //   // チャット画面である、divタグを取得する
-    //   let room = document.getElementById('room');
-
-    //   // チャット画面のdivに新規メッセージのdivを追加する
-    //   room.appendChild(messageBox);
-
-
-    // msg_text.classList.add('message-box');
-
 
 
     //自分の最新メッセージを削除する
+    //class=box-rightのdivの中から、最新の番号をremoveする。
+    //※サーバーから消えているわけじゃない
+    
     $("#sendBtn").on("click", function () {
         $($(".box-right")[$(".box-right").length-1]).remove(); 
 
