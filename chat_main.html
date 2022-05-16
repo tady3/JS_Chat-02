@@ -31,6 +31,8 @@
 
 
   <div class="input-group chat-input">
+
+    <!-- //ユーザー名をセレクトしようと思っていた時の残骸 -->
     <!-- <select name="" id="uname">
       <option value="" label=""></option>
       <option value="ユーザーA" label="ユーザーA"></option>
@@ -45,6 +47,12 @@
       <button id="sendBtn" class="btn btn-primary" type="button">メッセージ削除</button>
     </div>
   </div>
+
+
+  <!-- サウンドファイル -->
+  <audio id="linesound" preload="auto">
+    <source src="./assets/line_sound.mp3" type="audio/mp3">
+    </audio>
 
 
 
@@ -83,7 +91,6 @@
     const db = getDatabase(app);              //firebaseの記述ルール：RealtimeDBに接続    
     const dbRef = ref(db, "chat");                //〃：RealTimeDB内の”chat”を使う
 
-
     
 
     // promptでユーザー名を確認。ブランクやnullだと中に入れないようにしたい
@@ -98,7 +105,6 @@
 
       if (e.keyCode == 13) {
 
-
         const text = $("#inputMessage")
 
         const msg = {
@@ -106,7 +112,7 @@
           text: $("#inputMessage").val()
         }
 
-        //unameが空欄の場合は送信できないようにする     
+        //textが空欄の場合は送信できないようにする     
         if (msg.text === '') {
           //textが空欄の場合にアラートを出す
           alert("空欄では発信できません");
@@ -116,14 +122,14 @@
           const newPostRef = push(dbRef);　//ユニークキーを作る
           set(newPostRef, msg);
 
+        //発信時にLineサウンドを鳴らす
+        document.getElementById("linesound").play();
+
+
           //送信したらtextの内容が消える
           text.val('');
-        }
-        // 入力値が空かチェックする
-      if (text == '') {
-        // 入力値が空の場合、処理を中断する
-        return;
-      }
+        }             
+
       } });
 
 
@@ -148,13 +154,16 @@
 
       if (data.val().uname == myName) {
             let divData =  '<div class="box-right">\n' +
+                 
         '                        <div class="img_cont_msg">\n' +
         '                          <img src="./tachan_images.jpg"\n' +
         '                                 class="rounded-circle user_img_msg">\n' +
         '                        </div>\n' +
+
                                 '<p id="messageBox" class="message-box green">\n'+''
                                     + msg_text + '' +
                                 '</p>\n'
+
                             '</div>\n';
            //送信テキストをid_bodyContentのdivの直前に置く、とすることで、毎メッセージを一つの塊として表示。
            let d1 = document.getElementById('bodyContent');
@@ -165,13 +174,14 @@
 
           }else {
             let divData =  '<div class="box-left">\n' +
+              '                        <div class="img_cont_msg">\n' +
+    '                              <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"\n'+
+    '                                  class="rounded-circle user_img_msg">\n'+
+    '                            </div>\n' +
                             '<p id="messageBox" class="message-box white">\n'+''
                                + msg_text + '' +
                               '</p>\n'
-        '                        <div class="img_cont_msg">\n' +
-    '                              <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"\n' +
-    '                                  class="rounded-circle user_img_msg">\n' +
-    '                            </div>\n' +
+
                               '</div>\n';
 
            //送信テキストをid_bodyContentのdivの直前に置く、とすることで、毎メッセージを一つの塊として表示。
