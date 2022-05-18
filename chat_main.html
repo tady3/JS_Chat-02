@@ -16,13 +16,8 @@
 
   <div id="room">
 
-    <!-- <div class="box-left">
-      <p id="messageBox1"class="message-box white">こんにちは</p>
-    </div>
 
-    <div class="box-right">
-      <p id="messageBox" class="message-box green">こんにちは</p>
-    </div> -->
+
 
     <div class="card-body msg_card_body" id="bodyContent">
     </div>
@@ -46,6 +41,8 @@
     <div class="input-group-append">
       <button id="sendBtn" class="btn btn-primary" type="button">メッセージ削除</button>
     </div>
+    <button type="button" id="logout_btn">Log-Out </button>
+
   </div>
 
 
@@ -69,6 +66,8 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
     import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved, child, onValue } //ここに書いている関数をこれから使っていく
       from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged,sendEmailVerification,sendSignInLinkToEmail,signOut }
+        from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
 
 
     // TODO: Add SDKs for Firebase products that you want to use
@@ -89,6 +88,9 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);              //firebaseの記述ルール：RealtimeDBに接続    
     const dbRef = ref(db, "chat");                //〃：RealTimeDB内の”chat”を使う
+    const auth = getAuth();
+
+    
 
     
 
@@ -114,13 +116,19 @@
         
 
         
-    let myName = prompt("ユーザー名をいれてください");
+    //ユーザーがログインしているかどうかを監視し、ログインしている時だけアプリが使える
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+    
+        let myName = prompt("ユーザー名をいれてください");
     if( myName=== null||myName==""){alert("ユーザー名の入力は必須です")}
     else{
 
-    //Enterを押すとtextが発火する
+ 
+      //Enterを押すとtextが発火する
     $("#inputMessage").on("keydown", function (e) {
         const text = $("#inputMessage")
+              
  
       if (e.keyCode == 13) {
 
@@ -135,8 +143,6 @@
         }
 
         console.log(msg);
-        
-        
 
         //textが空欄の場合は送信できないようにする     
         if (msg.text === '') {
@@ -223,7 +229,18 @@
 
             let d1 = document.getElementById('bodyContent');
             d1.insertAdjacentHTML('beforebegin', divData);
+            
             }
+
+            //画面最下部にスクロール
+              let a = document.documentElement;
+              let y = a.scrollHeight - a.clientHeight;
+              window.scroll(0, y);
+                      
+
+
+
+
 
           });
         }
@@ -239,6 +256,25 @@
         $($(".box-right")[$(".box-right").length-1]).remove(); 
 
     })
+
+  } else {
+    //ログイン画面に戻る
+    window.location.href ='./index.html';
+    
+  }
+});
+
+
+$("#logout_btn").on("click", function () {
+        signOut(auth).then(() => {
+          alert ("ログアウトしました");
+  // Sign-out successful.
+    }).catch((error) => {
+      console.log("An error happened.");
+    // An error happened.
+    });
+    })
+
 
 
     
