@@ -50,6 +50,7 @@ body {
   justify-content: flex-end;
 }
 
+
 .message-box {
   padding: 50px;
   max-width: 42%;
@@ -63,4 +64,12 @@ body {
 
 .green {
   background-color: yellowgreen;
+}
+
+
+.message-time{
+  padding-top: 140px;
+  margin: 0px;
+  font-size: 8px;
+  text-align: bottom;
 }

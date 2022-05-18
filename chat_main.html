@@ -60,7 +60,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <!-- JQuery -->
 
-  <script src="./assets/js/app.js"></script>
 
 
 
@@ -96,21 +95,48 @@
     // promptでユーザー名を確認。ブランクやnullだと中に入れないようにしたい
     //※elseの処理を受信アクションよりしたに持っていく必要があった
     
+    
+    // 現在時刻
+    let toDoubleDigits = function(num) {
+      num += "";
+      if (num.length === 1) {num = "0" + num;
+    }return num;};
+    // 日付をYYYY/MM/DD HH:DD:MI:SS形式で取得
+    const now = new Date();
+        let yyyy = now.getFullYear();
+        let mm = toDoubleDigits(now.getMonth() + 1);
+        let dd = toDoubleDigits(now.getDate());
+        let hh = toDoubleDigits(now.getHours());
+        let mi = toDoubleDigits(now.getMinutes());
+        let sec = toDoubleDigits(now.getSeconds());
+
+        console.log(now);
+        
+
+        
     let myName = prompt("ユーザー名をいれてください");
     if( myName=== null||myName==""){alert("ユーザー名の入力は必須です")}
     else{
 
     //Enterを押すとtextが発火する
     $("#inputMessage").on("keydown", function (e) {
-
-      if (e.keyCode == 13) {
-
         const text = $("#inputMessage")
+ 
+      if (e.keyCode == 13) {
 
         const msg = {
           uname: myName,
-          text: $("#inputMessage").val()
+          text: $("#inputMessage").val(),
+          yy:yyyy,
+          mm:mm,
+          dd:dd,
+          hh:hh,
+          mi:mi
         }
+
+        console.log(msg);
+        
+        
 
         //textが空欄の場合は送信できないようにする     
         if (msg.text === '') {
@@ -145,28 +171,30 @@
       let msg_text = msg.uname+":";
       msg_text += '<br>';
       msg_text += msg.text;
-      // msg_text += '</p>';
 
-      console.log(msg_text);
-
+      let msg_time= msg.yy+"/";
+      msg_time  += msg.mm+"/";
+      msg_time += msg.dd+"/";
+      msg_time += msg.hh+":";
+      msg_time += msg.mi ;
+      
 
       //#unameが前に入れた名前と一致している場合、は右に表示される
 
       
       if (data.val().uname == myName) {
-            let divData =  '<div class="box-right">\n' +
-              
-                 
+            let divData =  '<div class="box-right">\n' +            
         '                        <div class="img_cont_msg">\n' +
         '                          <img src="./assets/tachan_images.jpg"\n' +
-                                          //class名をrounded-circlenにすると写真が丸で切り取られる
-                                                                            
+                                          //class名をrounded-circlenにすると写真が丸で切り取られる                              
         '                                 class="rounded-circle user_img_msg">\n' +
         '                        </div>\n' +
 
-                                '<p id="messageBox" class="message-box green">\n'+''
-                                    + msg_text + '' +
-                                '</p>\n'
+                                  '<p id="messageBox" class="message-box green">\n'+''
+                                      + msg_text + '' +'</p>\n'+
+                                  '<br>\n'+
+                                  '<p id="messageTime" class="message-time">\n'+''
+                                      + msg_time + '' +'</p>\n'
 
                             '</div>\n';
            //送信テキストをid_bodyContentのdivの直前に置く、とすることで、毎メッセージを一つの塊として表示。
@@ -179,12 +207,15 @@
           }else {
             let divData =  '<div class="box-left">\n' +
               '                        <div class="img_cont_msg">\n' +
-    '                              <img src="./assets/goku.jpg"\n'+
+    '                                  <img src="./assets/goku.jpg"\n'+
     '                                  class="rounded-circle user_img_msg">\n'+
     '                            </div>\n' +
-                            '<p id="messageBox" class="message-box white">\n'+''
-                               + msg_text + '' +
-                              '</p>\n'
+                                  '<p id="messageBox" class="message-box white">\n'+''
+                                  + msg_text + '' +'</p>\n'+
+                                  '<br>\n'+
+                                  '<p class="message-time">\n'+''
+                                  + msg_time + '' +
+                                    '</p>\n'
 
                               '</div>\n';
 
@@ -208,6 +239,9 @@
         $($(".box-right")[$(".box-right").length-1]).remove(); 
 
     })
+
+
+    
 
 
 
