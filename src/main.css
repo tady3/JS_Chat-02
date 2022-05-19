@@ -4,7 +4,7 @@ body {
     --color-secondary: #252c6a;
     --color-error: #cc3333;
     --color-success: #4bb544;
-    --border-radius: 4px;
+    --border-radius: 20px;
 
     margin: 0;
     height: 100vh;
@@ -26,9 +26,12 @@ body {
     background: #ffffff;
 }
 
+.green{
+    background-color: yellowgreen;
+}
+
 .container,
 .form__input,
-
 .form__button {
     font: 500 1rem 'Quicksand', sans-serif;   
 }
